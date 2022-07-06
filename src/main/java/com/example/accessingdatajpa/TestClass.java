@@ -91,8 +91,8 @@ public class TestClass {
 
 	private Iterable<Note> queryDslFun() {
 		return genericRepo.findAll(QNote.note, createBase(QNote.note._super).and(QNote.note.text.eq("text")),
-				List.of(QNote.note.image, QNote.note.newNote));
-//		return genericRepo.findAll(QNote.note, createBase(QNote.note._super).and(QNote.note.text.eq("text")));
+				List.of(QNote.note.image, QNote.note.newNote, QNote.note.newNote.image));
+//		return genericRepo.findAll(QNote.note, createBase(QNote.note._super).and(QNote.note.text.eq("text")), "customer-eager");
 	}
 
 	@PostConstruct

@@ -12,7 +12,8 @@ import javax.persistence.Table;
 @Table(name = "note")
 @NamedEntityGraph(name = "customer-eager", attributeNodes = { @NamedAttributeNode(value = "image"),
 		@NamedAttributeNode(value = "owner"),
-		@NamedAttributeNode(value = "newNote") })
+		@NamedAttributeNode(value = "newNote", subgraph = "newNoteSub") }, subgraphs = {
+				@NamedSubgraph(name = "newNoteSub", attributeNodes = @NamedAttributeNode(value = "image")) })
 public class Note extends CustomerSpecific {
 
 	private String text;
@@ -22,7 +23,6 @@ public class Note extends CustomerSpecific {
 
 	@OneToOne(fetch = FetchType.LAZY)
 	private Note newNote;
-	
 
 	@Override
 	public String toString() {
