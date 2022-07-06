@@ -22,7 +22,7 @@ public class Customer {
 	private String firstName;
 	private String lastName;
 
-	@JoinColumn(name = "note", referencedColumnName = "id")
+	@JoinColumn(name = "note")
 	@OneToOne(fetch = FetchType.LAZY)
 	private CustomerSpecific note;
 

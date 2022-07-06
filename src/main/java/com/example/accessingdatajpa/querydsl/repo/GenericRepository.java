@@ -1,5 +1,6 @@
 package com.example.accessingdatajpa.querydsl.repo;
 
+import java.util.LinkedList;
 import java.util.List;
 import java.util.stream.Collectors;
 
@@ -23,15 +24,17 @@ public class GenericRepository {
 		return findAll(base, predicate, (String) null);
 	}
 
-	public <T> List<T> findAll(EntityPathBase<T> base, Predicate predicate, List<EntityPathBase<?>> joins) {
+	public <T> List<T> findAll(EntityPathBase<T> base, Predicate predicate, List<EntityPathBase<?>> toFetch) {
 		JPAQuery<T> query = new JPAQuery<>(em);
-
+		List<EntityPathBase<?>> rootsEx = new LinkedList<>();
+		rootsEx.add(base);
+		rootsEx.addAll(toFetch);
 		var q = query.from(base);
-		for (int i = 0; i < joins.size(); i++) {
-			q = q.leftJoin(joins.get(i)).fetchJoin();
+		for (int i = 0; i < toFetch.size(); i++) {
+			q = q.leftJoin(toFetch.get(i)).fetchAll();
 		}
-		;
-		return q.where(predicate).select(base, joins.get(1)).fetchAll().fetch().stream()
+		EntityPathBase<T>[] paths = rootsEx.toArray(new EntityPathBase[toFetch.size()]);
+		return q.where(predicate).select(paths).fetchAll().fetch().stream()
 				.map(t -> t.get(0, base.getType())).collect(Collectors.toList());
 	}
 

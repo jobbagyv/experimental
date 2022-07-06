@@ -8,6 +8,8 @@ import javax.persistence.NamedSubgraph;
 import javax.persistence.OneToOne;
 import javax.persistence.Table;
 
+import com.querydsl.core.annotations.QueryInit;
+
 @Entity
 @Table(name = "note")
 @NamedEntityGraph(name = "customer-eager", attributeNodes = { @NamedAttributeNode(value = "image"),
@@ -19,8 +21,10 @@ public class Note extends CustomerSpecific {
 	private String text;
 
 	@OneToOne(fetch = FetchType.LAZY)
+	@QueryInit("*.*")
 	private Image image;
 
+	@QueryInit("*.*")
 	@OneToOne(fetch = FetchType.LAZY)
 	private Note newNote;
 
